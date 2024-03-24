@@ -10,9 +10,6 @@ namespace IMDbLib.Repository
     {
         IEnumerable<T> GetAll();
         T Get(string id);
-        void Insert(T entity);
-        void Update(T entity);
-        void Delete(T id);
         IEnumerable<T> RunStoredProcedure(string procedureName, params object[] parameters);
     }
 }

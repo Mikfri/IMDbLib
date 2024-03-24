@@ -23,7 +23,7 @@ namespace IMDbLib.Services
         }
         public void AddMovie(MovieBase movie)
         {
-            _repository.RunStoredProcedure("AddMovie", movie.Tconst, movie.TitleType, movie.PrimaryTitle, movie.IsAdult, movie.StartYear, movie.EndYear, movie.RuntimeMins);
+            _repository.RunStoredProcedure("AddMovie", movie.TitleType, movie.PrimaryTitle, movie.IsAdult, movie.StartYear, movie.EndYear, movie.RuntimeMins);
         }
 
         public MovieBase GetMovieDetails(string tconst)

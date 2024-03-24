@@ -18,39 +18,39 @@ namespace IMDbLib.Repository
             _dbSet = context.Set<T>();
         }
 
-        public T Get(string id)
-        {
-            return _dbSet.Find(id);
-        }
-
         public IEnumerable<T> GetAll()
         {
             return _dbSet.ToList();
         }
 
-        public void Insert(T entity)
+        public T Get(string id)
         {
-            _dbSet.Add(entity);
-            _context.SaveChanges();
-        }        
-
-        public void Update(T entity)
-        {
-            _dbSet.Attach(entity);
-            _context.Entry(entity).State = EntityState.Modified;
-            _context.SaveChanges();
+            return _dbSet.Find(id);
         }
 
-        public void Delete(T entity)
-        {
-            if (_context.Entry(entity).State == EntityState.Detached)
-            {
-                _dbSet.Attach(entity);
-            }
-            _dbSet.Remove(entity);
-            _context.SaveChanges();
-        }
-         
+        //public void Insert(T entity)
+        //{
+        //    _dbSet.Add(entity);
+        //    _context.SaveChanges();
+        //}
+
+        //public void Update(T entity)
+        //{
+        //    _dbSet.Attach(entity);
+        //    _context.Entry(entity).State = EntityState.Modified;
+        //    _context.SaveChanges();
+        //}
+
+        //public void Delete(T entity)
+        //{
+        //    if (_context.Entry(entity).State == EntityState.Detached)
+        //    {
+        //        _dbSet.Attach(entity);
+        //    }
+        //    _dbSet.Remove(entity);
+        //    _context.SaveChanges();
+        //}
+
         public IEnumerable<T> RunStoredProcedure(string procedureName, params object[] parameters)
         {
             var parameterString = string.Join(", ", parameters.Select((p, i) => $"@p{i}"));
