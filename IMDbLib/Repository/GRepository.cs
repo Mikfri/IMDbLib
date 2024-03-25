@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using IMDbLib.DataContext;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,10 +10,10 @@ namespace IMDbLib.Repository
 {
     public class GRepository<T> : IGRepository<T> where T : class
     {
-        private readonly DbContext _context;
+        private readonly IMDb_Context _context;
         private readonly DbSet<T> _dbSet;
 
-        public GRepository(DbContext context)
+        public GRepository(IMDb_Context context)
         {
             _context = context;
             _dbSet = context.Set<T>();
