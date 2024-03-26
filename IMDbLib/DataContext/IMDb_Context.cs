@@ -20,7 +20,8 @@ namespace IMDbLib.DataContext
             if (!optionsBuilder.IsConfigured)
             {
                 optionsBuilder.UseSqlServer(
-                    @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=IMDb_DB; Integrated Security=True;");                   
+                    @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=IMDb_DB; Integrated Security=True;");
+                //optionsBuilder.UseLazyLoadingProxies();
             }
         }
         

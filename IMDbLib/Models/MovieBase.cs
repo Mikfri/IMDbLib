@@ -40,7 +40,12 @@ namespace IMDbLib.Models
         public ICollection<MovieDirector> Directors { get; set; } = new List<MovieDirector>();
         public ICollection<MovieWriter> Writers { get; set; } = new List<MovieWriter>();
 
-
+        /*
+        VIRTUAL NAVIGATION PROPERTIES
+        When using lazy loading proxies, all navigation properties must be declared as virtual.
+        This allows Entity Framework to override them in a derived proxy class 
+        and insert the code necessary to perform lazy loading.
+         */
 
         public MovieBase() { }
 

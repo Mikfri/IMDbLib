@@ -1,7 +1,11 @@
-﻿using IMDbLib.Models;
+﻿using CsvHelper;
+using IMDbLib.Models;
 using IMDbLib.Repository;
+using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -28,8 +32,24 @@ namespace IMDbLib.Services
 
         public MovieBase GetMovieDetails(string tconst)
         {
+            //return _repository.GetWithIncludes(tconst, m => m.Tconst == tconst, m => m.Directors, m => m.Writers);
+            //return _repository.GetWithIncludes(tconst, m => m.Directors, m => m.Writers);
+
             return _repository.RunStoredProcedure("GetMovieDetails", tconst).Cast<MovieBase>().FirstOrDefault();
         }
+
+        //public MovieBase GetMovieDetails(string tconst)
+        //{
+        //    var movie = _repository.RunStoredProcedure("GetMovieBase", tconst).Cast<MovieBase>().FirstOrDefault();
+        //    var directors = _repository.RunStoredProcedure("GetMovieRelatedDirectors", tconst).Cast<MovieDirector>().ToList();
+        //    var writers = _repository.RunStoredProcedure("GetMovieRelatedWriters", tconst).Cast<MovieWriter>().ToList();
+
+        //    // Tilføj directors og writers til movie objektet her...
+        //    movie.Directors = directors;
+        //    movie.Writers = writers;
+
+        //    return movie;
+        //}
 
         public MovieBase UpdateMovie(MovieBase movie)
         {
