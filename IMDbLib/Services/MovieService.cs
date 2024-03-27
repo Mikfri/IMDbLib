@@ -1,6 +1,7 @@
 ﻿using CsvHelper;
+using IMDbLib.DataContext;
+using IMDbLib.DTOs;
 using IMDbLib.Models;
-using IMDbLib.Repository;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -12,68 +13,61 @@ using System.Threading.Tasks;
 
 namespace IMDbLib.Services
 {
+    /// <summary>
+    /// MovieService klassen har direkte adgang til DbContext og benytter ikke en repository klasse.
+    /// Dette skyldes vi benytter Entity Framework Core, som er en repository og unit of work i sig selv.
+    /// 
+    /// Brugeren har IKKE direkte adgang til tabellerne i databasen, fordi alt kommunikation med databasen
+    /// sker gennem service klassen.
+    /// </summary>
     public class MovieService
     {
-        private readonly IGRepository<MovieBase> _repository;
+        private readonly IMDb_Context _context;
 
-        public MovieService(IGRepository<MovieBase> repository)
+        public MovieService(IMDb_Context context)
         {
-            _repository = repository ?? throw new ArgumentNullException(nameof(repository));
+            _context = context;
         }
 
-        public IEnumerable<MovieBase> SearchMovies(string title)
+        public async Task AddMovie(MovieBaseDTO movieDTO)
         {
-            return _repository.RunStoredProcedure("SearchMovies", title).Cast<MovieBase>();
-        }
+            //-------- Automatisk generering af ID --------
+            // Find the highest existing ID
+            var highestId = await _context.MovieBases.MaxAsync(m => m.Tconst);
 
-        public void AddMovie(MovieBase movie)
-        {
-            _repository.RunStoredProcedure("AddMovie", movie.TitleType.Type, movie.PrimaryTitle, movie.IsAdult, movie.StartYear, movie.EndYear, movie.RuntimeMins);
-        }
+            // Extract the numeric part of the ID and increment it
+            int numericPart = int.Parse(highestId.Substring(2));
+            numericPart++;
 
-        public MovieBase GetMovieDetails(string tconst)
-        {
-            var movie = _repository
-                .GetAll()
-                .Include(m => m.Directors)
-                    .ThenInclude(d => d.Person)
-                .Include(m => m.Writers)
-                    .ThenInclude(w => w.Person)
-                .FirstOrDefault(m => m.Tconst == tconst);
+            // Construct the new ID
+            string newId = "tt" + numericPart.ToString("D7"); // D7 means 7 digits with leading zeros
 
-            return movie;
-        }
+            //-------- Opret MovieBase objekt --------
+            // Check if the TitleType exists, if not create it
+            var titleType = await _context.TitleTypes.FindAsync(movieDTO.TitleType) ?? new TitleType { Type = movieDTO.TitleType };
 
-        //public MovieBase GetMovieDetails(string tconst)
-        //{
-        //    //return _repository.GetWithIncludes(tconst, m => m.Tconst == tconst, m => m.Directors, m => m.Writers);
-        //    //return _repository.GetWithIncludes(tconst, m => m.Directors, m => m.Writers);
+            // Create the MovieBase object
+            MovieBase movie = new MovieBase
+            {
+                Tconst = newId,
+                TitleType = titleType,
+                PrimaryTitle = movieDTO.PrimaryTitle,
+                OriginalTitle = movieDTO.OriginalTitle,
+                IsAdult = movieDTO.IsAdult,
+                StartYear = movieDTO.StartYear,
+                EndYear = movieDTO.EndYear,
+                RuntimeMins = movieDTO.RuntimeMins
+            };
 
-        //    return _repository.RunStoredProcedure("GetMovieDetails", tconst).Cast<MovieBase>().FirstOrDefault();
-        //}
+            // Check if the Genres exist, if not create them and add them to the MovieBase
+            foreach (var genre in movieDTO.Genres)
+            {
+                var movieGenre = await _context.Genres.FindAsync(genre) ?? new Genre { GenreType = genre };
+                movie.MovieGenres.Add(new MovieGenre { MovieBase = movie, Genre = movieGenre });
+            }
 
-        //public MovieBase GetMovieDetails(string tconst)
-        //{
-        //    var movie = _repository.RunStoredProcedure("GetMovieBase", tconst).Cast<MovieBase>().FirstOrDefault();
-        //    var directors = _repository.RunStoredProcedure("GetMovieRelatedDirectors", tconst).Cast<MovieDirector>().ToList();
-        //    var writers = _repository.RunStoredProcedure("GetMovieRelatedWriters", tconst).Cast<MovieWriter>().ToList();
-
-        //    // Tilføj directors og writers til movie objektet her...
-        //    movie.Directors = directors;
-        //    movie.Writers = writers;
-
-        //    return movie;
-        //}
-
-        public MovieBase UpdateMovie(MovieBase movie)
-        {
-            _repository.RunStoredProcedure("UpdateMovie", movie.Tconst, movie.TitleType, movie.PrimaryTitle, movie.IsAdult, movie.StartYear, movie.EndYear, movie.RuntimeMins);
-            return _repository.Get(movie.Tconst);
-        }
-
-        public void DeleteMovie(MovieBase movie)
-        {
-            _repository.RunStoredProcedure("DeleteMovie", movie.Tconst);
+            _context.MovieBases.Add(movie);
+            await _context.SaveChangesAsync();
         }
     }
 }
