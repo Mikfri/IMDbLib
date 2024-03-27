@@ -9,7 +9,8 @@ namespace IMDbLib.Repository
 {
     public interface IGRepository<T> where T : class
     {
-        IEnumerable<T> GetAll();
+        IQueryable<T> GetAll();
+        //IEnumerable<T> GetAll();
         T Get(string id);
         IEnumerable<T> RunStoredProcedure(string procedureName, params object[] parameters);
         //T GetWithIncludes<TKey>(TKey id, Expression<Func<T, bool>> idExpression, params Expression<Func<T, object>>[] includeProperties);

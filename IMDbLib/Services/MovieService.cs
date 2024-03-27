@@ -25,18 +25,32 @@ namespace IMDbLib.Services
         {
             return _repository.RunStoredProcedure("SearchMovies", title).Cast<MovieBase>();
         }
+
         public void AddMovie(MovieBase movie)
         {
-            _repository.RunStoredProcedure("AddMovie", movie.TitleType, movie.PrimaryTitle, movie.IsAdult, movie.StartYear, movie.EndYear, movie.RuntimeMins);
+            _repository.RunStoredProcedure("AddMovie", movie.TitleType.Type, movie.PrimaryTitle, movie.IsAdult, movie.StartYear, movie.EndYear, movie.RuntimeMins);
         }
 
         public MovieBase GetMovieDetails(string tconst)
         {
-            //return _repository.GetWithIncludes(tconst, m => m.Tconst == tconst, m => m.Directors, m => m.Writers);
-            //return _repository.GetWithIncludes(tconst, m => m.Directors, m => m.Writers);
+            var movie = _repository
+                .GetAll()
+                .Include(m => m.Directors)
+                    .ThenInclude(d => d.Person)
+                .Include(m => m.Writers)
+                    .ThenInclude(w => w.Person)
+                .FirstOrDefault(m => m.Tconst == tconst);
 
-            return _repository.RunStoredProcedure("GetMovieDetails", tconst).Cast<MovieBase>().FirstOrDefault();
+            return movie;
         }
+
+        //public MovieBase GetMovieDetails(string tconst)
+        //{
+        //    //return _repository.GetWithIncludes(tconst, m => m.Tconst == tconst, m => m.Directors, m => m.Writers);
+        //    //return _repository.GetWithIncludes(tconst, m => m.Directors, m => m.Writers);
+
+        //    return _repository.RunStoredProcedure("GetMovieDetails", tconst).Cast<MovieBase>().FirstOrDefault();
+        //}
 
         //public MovieBase GetMovieDetails(string tconst)
         //{
