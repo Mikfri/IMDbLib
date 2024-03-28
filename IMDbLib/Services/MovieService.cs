@@ -83,31 +83,30 @@ namespace IMDbLib.Services
 
         public async Task<List<MovieBaseDTO>> SearchMovies(string searchString)
         {
-            //------------ STORED PROCEDURE: Like ------------
+            // Execute the stored procedure
             var movies = await _context.MovieBases
                 .FromSqlInterpolated($"EXECUTE dbo.SearchMovies {searchString}")
                 .ToListAsync();
 
-            //------------ EF.Functions.Like ------------
-            //string searchPattern = $"%{searchString}%";
-
-            //var movies = await _context.MovieBases
-            //    .Where(m => EF.Functions.Like(m.PrimaryTitle, searchPattern))
-            //    .OrderBy(m => m.PrimaryTitle)
-            //    .ToListAsync();
+            // Load the related entities for each movie
+            foreach (var movie in movies)
+            {
+                _context.Entry(movie).Reference(m => m.TitleType).Load();
+                _context.Entry(movie).Collection(m => m.MovieGenres).Query().Include(mg => mg.Genre).Load();
+            }
 
             // Convert the MovieBase objects to MovieBaseDTOs
             var movieDTOs = movies.Select(m => new MovieBaseDTO
             {
                 Tconst = m.Tconst,
-                TitleType = m.TitleType.Type,
+                TitleType = m.TitleType?.Type,
                 PrimaryTitle = m.PrimaryTitle,
                 OriginalTitle = m.OriginalTitle,
                 IsAdult = m.IsAdult,
                 StartYear = m.StartYear,
                 EndYear = m.EndYear,
                 RuntimeMins = m.RuntimeMins,
-                Genres = m.MovieGenres.Select(g => g.Genre.GenreType).ToList()
+                Genres = m.MovieGenres?.Select(g => g.Genre.GenreType).ToList() ?? new List<string>()
             }).ToList();
 
             return movieDTOs;
