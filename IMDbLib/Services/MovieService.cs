@@ -31,16 +31,27 @@ namespace IMDbLib.Services
 
         public async Task AddMovie(MovieBaseDTO movieDTO)
         {
-            //-------- Automatisk generering af ID --------
-            // Find the highest existing ID
-            var highestId = await _context.MovieBases.MaxAsync(m => m.Tconst);
+            //--------- STORED PROCEDURE: ID generering ---------
+            // Call the stored procedure to generate the new ID
+            var idQuery = new SqlParameter("@newId", System.Data.SqlDbType.NVarChar)
+            {
+                Direction = System.Data.ParameterDirection.Output
+            };
 
-            // Extract the numeric part of the ID and increment it
-            int numericPart = int.Parse(highestId.Substring(2));
-            numericPart++;
+            await _context.Database.ExecuteSqlRawAsync("EXECUTE dbo.GenerateNextMovieId @newId OUT", idQuery);
 
-            // Construct the new ID
-            string newId = "tt" + numericPart.ToString("D7"); // D7 means 7 digits with leading zeros
+            string newId = idQuery.Value.ToString();
+
+            //------------ EF Core: ID generering ------------
+            //// Find the highest existing ID
+            //var highestId = await _context.MovieBases.MaxAsync(m => m.Tconst);
+
+            //// Extract the numeric part of the ID and increment it
+            //int numericPart = int.Parse(highestId.Substring(2));
+            //numericPart++;
+
+            //// Construct the new ID
+            //string newId = "tt" + numericPart.ToString("D7"); // D7 means 7 digits with leading zeros
 
             //-------- Opret MovieBase objekt --------
             // Check if the TitleType exists, if not create it
@@ -72,16 +83,14 @@ namespace IMDbLib.Services
 
         public async Task<List<MovieBaseDTO>> SearchMovies(string searchString)
         {
-            //------------ STORED PROCEDURE ------------
+            //------------ STORED PROCEDURE: Like ------------
             var movies = await _context.MovieBases
                 .FromSqlInterpolated($"EXECUTE dbo.SearchMovies {searchString}")
                 .ToListAsync();
 
             //------------ EF.Functions.Like ------------
-            //// Add wildcard characters to the search string
             //string searchPattern = $"%{searchString}%";
 
-            //// Query the database
             //var movies = await _context.MovieBases
             //    .Where(m => EF.Functions.Like(m.PrimaryTitle, searchPattern))
             //    .OrderBy(m => m.PrimaryTitle)
@@ -103,5 +112,57 @@ namespace IMDbLib.Services
 
             return movieDTOs;
         }
+
+        public async Task UpdateMovie(MovieBaseDTO movieDTO)
+        {
+            // Find the existing movie
+            var movie = await _context.MovieBases.FindAsync(movieDTO.Tconst);
+
+            // If the movie doesn't exist, throw an exception or return an error
+            if (movie == null)
+            {
+                throw new Exception($"Movie with ID {movieDTO.Tconst} not found");
+            }
+
+            // Update the movie properties
+            movie.TitleType.Type = movieDTO.TitleType;
+            movie.PrimaryTitle = movieDTO.PrimaryTitle;
+            movie.OriginalTitle = movieDTO.OriginalTitle;
+            movie.IsAdult = movieDTO.IsAdult;
+            movie.StartYear = movieDTO.StartYear;
+            movie.EndYear = movieDTO.EndYear;
+            movie.RuntimeMins = movieDTO.RuntimeMins;
+
+            // Update the genres
+            movie.MovieGenres.Clear();
+            foreach (var genre in movieDTO.Genres)
+            {
+                var movieGenre = await _context.Genres.FindAsync(genre) ?? new Genre { GenreType = genre };
+                movie.MovieGenres.Add(new MovieGenre { MovieBase = movie, Genre = movieGenre });
+            }
+
+            // Save changes to the database
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task DeleteMovie(string tconst)
+        {
+            // Find the movie by ID
+            var movie = await _context.MovieBases.FindAsync(tconst);
+
+            // If the movie doesn't exist, throw an exception or return an error
+            if (movie == null)
+            {
+                throw new Exception($"Movie with ID {tconst} not found");
+            }
+
+            // Remove the movie from the context
+            _context.MovieBases.Remove(movie);
+
+            // Save changes to the database
+            await _context.SaveChangesAsync();
+        }        
+
+        
     }
 }
