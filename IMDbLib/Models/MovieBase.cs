@@ -35,7 +35,7 @@ namespace IMDbLib.Models
         [Name("runtimeMinutes")]
         public int? RuntimeMins { get; set; }
 
-
+        public ICollection<KnownForTitle> KnownForTitles { get; set; } = new List<KnownForTitle>();
         public ICollection<MovieGenre> MovieGenres { get; set; } = new List<MovieGenre>();
         public ICollection<MovieDirector> Directors { get; set; } = new List<MovieDirector>();
         public ICollection<MovieWriter> Writers { get; set; } = new List<MovieWriter>();

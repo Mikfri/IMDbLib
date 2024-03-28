@@ -25,7 +25,7 @@ namespace IMDbLib.Models
         [Ignore]
         public DateOnly? DeathYear { get; set; }
 
-        public ICollection<BlockBuster> BlockBusters { get; set; } = new List<BlockBuster>();
+        public ICollection<KnownForTitle> KnownForTitles { get; set; } = new List<KnownForTitle>();
         public ICollection<PersonalCareer> PersonalCareers { get; set; } = new List<PersonalCareer>();
         public ICollection<MovieDirector> Directors { get; set; } = new List<MovieDirector>();
         public ICollection<MovieWriter> Writers { get; set; } = new List<MovieWriter>();

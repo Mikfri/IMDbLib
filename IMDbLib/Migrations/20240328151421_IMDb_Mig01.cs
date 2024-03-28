@@ -131,6 +131,30 @@ namespace IMDbLib.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "KnownForTitles",
+                columns: table => new
+                {
+                    Nconst = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Tconst = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_KnownForTitles", x => new { x.Nconst, x.Tconst });
+                    table.ForeignKey(
+                        name: "FK_KnownForTitles_MovieBases_Tconst",
+                        column: x => x.Tconst,
+                        principalTable: "MovieBases",
+                        principalColumn: "Tconst",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_KnownForTitles_Persons_Nconst",
+                        column: x => x.Nconst,
+                        principalTable: "Persons",
+                        principalColumn: "Nconst",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "MovieGenres",
                 columns: table => new
                 {
@@ -151,30 +175,6 @@ namespace IMDbLib.Migrations
                         column: x => x.Tconst,
                         principalTable: "MovieBases",
                         principalColumn: "Tconst",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "PersonalBlockbusters",
-                columns: table => new
-                {
-                    Nconst = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Tconst = table.Column<string>(type: "nvarchar(450)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_PersonalBlockbusters", x => new { x.Nconst, x.Tconst });
-                    table.ForeignKey(
-                        name: "FK_PersonalBlockbusters_MovieBases_Tconst",
-                        column: x => x.Tconst,
-                        principalTable: "MovieBases",
-                        principalColumn: "Tconst",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_PersonalBlockbusters_Persons_Nconst",
-                        column: x => x.Nconst,
-                        principalTable: "Persons",
-                        principalColumn: "Nconst",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -208,6 +208,11 @@ namespace IMDbLib.Migrations
                 column: "Nconst");
 
             migrationBuilder.CreateIndex(
+                name: "IX_KnownForTitles_Tconst",
+                table: "KnownForTitles",
+                column: "Tconst");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_MovieBases_TitleTypeType",
                 table: "MovieBases",
                 column: "TitleTypeType");
@@ -216,11 +221,6 @@ namespace IMDbLib.Migrations
                 name: "IX_MovieGenres_GenreType",
                 table: "MovieGenres",
                 column: "GenreType");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_PersonalBlockbusters_Tconst",
-                table: "PersonalBlockbusters",
-                column: "Tconst");
 
             migrationBuilder.CreateIndex(
                 name: "IX_PersonalCareers_PrimProf",
@@ -240,10 +240,10 @@ namespace IMDbLib.Migrations
                 name: "Directors");
 
             migrationBuilder.DropTable(
-                name: "MovieGenres");
+                name: "KnownForTitles");
 
             migrationBuilder.DropTable(
-                name: "PersonalBlockbusters");
+                name: "MovieGenres");
 
             migrationBuilder.DropTable(
                 name: "PersonalCareers");

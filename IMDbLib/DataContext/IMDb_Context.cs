@@ -30,18 +30,18 @@ namespace IMDbLib.DataContext
             base.OnModelCreating(modelBuilder);
 
             //--------------------Konfiguration for forholdet mellem Person og MovieBase--------------------
-            modelBuilder.Entity<BlockBuster>()
+            modelBuilder.Entity<KnownForTitle>()
                 .HasKey(bb => new { bb.Nconst, bb.Tconst });
 
-            modelBuilder.Entity<BlockBuster>()
-                .HasOne(bb => bb.Person)        // en BlockBuster har en Person
-                .WithMany(p => p.BlockBusters)  // en Person har mange BlockBusters
-                .HasForeignKey(bb => bb.Nconst);// en BlockBuster har en fremmednøgle Nconst
+            modelBuilder.Entity<KnownForTitle>()
+                .HasOne(bb => bb.Person)            // en BlockBuster har en Person
+                .WithMany(p => p.KnownForTitles)    // en Person har mange KnownForTitles
+                .HasForeignKey(bb => bb.Nconst);    // en BlockBuster har en fremmednøgle Nconst
 
-            modelBuilder.Entity<BlockBuster>()
-                .HasOne(bb => bb.MovieBase)     // en BlockBuster har en MovieBase
-                .WithMany()
-                .HasForeignKey(bb => bb.Tconst);// en BlockBuster har en fremmednøgle Tconst
+            modelBuilder.Entity<KnownForTitle>()
+                .HasOne(bb => bb.MovieBase)         // en BlockBuster har en MovieBase
+                .WithMany(mb => mb.KnownForTitles)  // en MovieBase har mange KnownForTitles
+                .HasForeignKey(bb => bb.Tconst);    // en BlockBuster har en fremmednøgle Tconst
 
             //-------------------Konfiguration for forholdet mellem Person og Profession-------------------
             modelBuilder.Entity<PersonalCareer>()
@@ -112,7 +112,7 @@ namespace IMDbLib.DataContext
         public DbSet<Person> Persons { get; set; }
         public DbSet<Profession> Professions { get; set; }
         public DbSet<PersonalCareer> PersonalCareers { get; set; }
-        public DbSet<BlockBuster> PersonalBlockbusters { get; set; }
+        public DbSet<KnownForTitle> KnownForTitles { get; set; }
 
         //--------- title.crew.tsv ---------
         public DbSet<MovieWriter> Writers { get; set; }

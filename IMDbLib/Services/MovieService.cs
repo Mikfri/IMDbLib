@@ -35,7 +35,8 @@ namespace IMDbLib.Services
             // Call the stored procedure to generate the new ID
             var idQuery = new SqlParameter("@newId", System.Data.SqlDbType.NVarChar)
             {
-                Direction = System.Data.ParameterDirection.Output
+                Direction = System.Data.ParameterDirection.Output,
+                Size = 400 // Set the size to a large enough value to hold the output
             };
 
             await _context.Database.ExecuteSqlRawAsync("EXECUTE dbo.GenerateNextMovieId @newId OUT", idQuery);
@@ -81,7 +82,7 @@ namespace IMDbLib.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task<List<MovieBaseDTO>> SearchMovies(string searchString)
+        public async Task<List<MovieBaseDTO>> GetMovieListByTitle(string searchString)
         {
             //------------ STORED PROCEDURE: Søgning ------------
             var movies = await _context.MovieBases
@@ -122,6 +123,46 @@ namespace IMDbLib.Services
 
             return movieDTOs;
         }
+
+        public async Task<AllMovieInfoDTO> GetAllMovieInfoByTconst(string tconst)
+        {
+            var movie = await _context.MovieBases
+                .Include(m => m.TitleType)
+                .Include(m => m.MovieGenres)
+                    .ThenInclude(mg => mg.Genre)
+                .Include(m => m.Directors)
+                    .ThenInclude(d => d.Person)
+                .Include(m => m.Writers)
+                    .ThenInclude(w => w.Person)
+                .Include(m => m.KnownForTitles)
+                    .ThenInclude(k => k.Person) // Tilføj denne linje
+                .FirstOrDefaultAsync(m => m.Tconst == tconst);
+
+            if (movie == null)
+            {
+                throw new Exception($"Movie with ID {tconst} not found");
+            }
+
+            var movieDTO = new AllMovieInfoDTO
+            {
+                Tconst = movie.Tconst,
+                TitleType = movie.TitleType?.Type,
+                PrimaryTitle = movie.PrimaryTitle,
+                OriginalTitle = movie.OriginalTitle,
+                IsAdult = movie.IsAdult,
+                StartYear = movie.StartYear,
+                EndYear = movie.EndYear,
+                RuntimeMins = movie.RuntimeMins,
+                Genres = movie.MovieGenres?.Select(g => g.Genre.GenreType).ToList() ?? new List<string>(),
+                MovieDirectors = movie.Directors?.Select(d => d.Person.PrimaryName).ToList() ?? new List<string>(),
+                MovieWriters = movie.Writers?.Select(w => w.Person.PrimaryName).ToList() ?? new List<string>(),
+                KnownForTitles = movie.KnownForTitles?.Select(k => k.Person.PrimaryName).ToList() ?? new List<string>() // Opdater denne linje
+            };
+
+            return movieDTO;
+        }
+
+
 
 
         public async Task UpdateMovie(MovieBaseDTO movieDTO)

@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace IMDbLib.Migrations
 {
     [DbContext(typeof(IMDb_Context))]
-    [Migration("20240323085633_IMDb_Mig01")]
+    [Migration("20240328151421_IMDb_Mig01")]
     partial class IMDb_Mig01
     {
         /// <inheritdoc />
@@ -25,7 +25,17 @@ namespace IMDbLib.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("IMDbLib.Models.BlockBuster", b =>
+            modelBuilder.Entity("IMDbLib.Models.Genre", b =>
+                {
+                    b.Property<string>("GenreType")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("GenreType");
+
+                    b.ToTable("Genres");
+                });
+
+            modelBuilder.Entity("IMDbLib.Models.KnownForTitle", b =>
                 {
                     b.Property<string>("Nconst")
                         .HasColumnType("nvarchar(450)");
@@ -37,17 +47,7 @@ namespace IMDbLib.Migrations
 
                     b.HasIndex("Tconst");
 
-                    b.ToTable("PersonalBlockbusters");
-                });
-
-            modelBuilder.Entity("IMDbLib.Models.Genre", b =>
-                {
-                    b.Property<string>("GenreType")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("GenreType");
-
-                    b.ToTable("Genres");
+                    b.ToTable("KnownForTitles");
                 });
 
             modelBuilder.Entity("IMDbLib.Models.MovieBase", b =>
@@ -185,16 +185,16 @@ namespace IMDbLib.Migrations
                     b.ToTable("TitleTypes");
                 });
 
-            modelBuilder.Entity("IMDbLib.Models.BlockBuster", b =>
+            modelBuilder.Entity("IMDbLib.Models.KnownForTitle", b =>
                 {
                     b.HasOne("IMDbLib.Models.Person", "Person")
-                        .WithMany("BlockBusters")
+                        .WithMany("KnownForTitles")
                         .HasForeignKey("Nconst")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("IMDbLib.Models.MovieBase", "MovieBase")
-                        .WithMany()
+                        .WithMany("KnownForTitles")
                         .HasForeignKey("Tconst")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -295,6 +295,8 @@ namespace IMDbLib.Migrations
                 {
                     b.Navigation("Directors");
 
+                    b.Navigation("KnownForTitles");
+
                     b.Navigation("MovieGenres");
 
                     b.Navigation("Writers");
@@ -302,9 +304,9 @@ namespace IMDbLib.Migrations
 
             modelBuilder.Entity("IMDbLib.Models.Person", b =>
                 {
-                    b.Navigation("BlockBusters");
-
                     b.Navigation("Directors");
+
+                    b.Navigation("KnownForTitles");
 
                     b.Navigation("PersonalCareers");
 

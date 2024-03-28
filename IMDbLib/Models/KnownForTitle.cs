@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace IMDbLib.Models
 {
-    public class BlockBuster
+    public class KnownForTitle
     {
         [ForeignKey("Person")]
         public string Nconst { get; set; }
@@ -22,7 +22,7 @@ namespace IMDbLib.Models
 
         
 
-        public BlockBuster() { }
+        public KnownForTitle() { }
 
         public override string ToString()
         {
