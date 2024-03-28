@@ -93,7 +93,9 @@ namespace IMDbLib.Services
             foreach (var movie in movies)
             {
                 _context.Entry(movie).Reference(m => m.TitleType).Load();
-                _context.Entry(movie).Collection(m => m.MovieGenres).Query().Include(mg => mg.Genre).Load();
+                //_context.Entry(movie).Collection(m => m.MovieGenres).Query().Include(mg => mg.Genre).Load(); // eager loading
+                _context.Entry(movie).Collection(m => m.MovieGenres).Load();    // lazy loading.. virker ikke
+
             }
 
             //------------ EF Core: Søgning med TitleType og Genre ------------
@@ -118,7 +120,7 @@ namespace IMDbLib.Services
                 StartYear = m.StartYear,
                 EndYear = m.EndYear,
                 RuntimeMins = m.RuntimeMins,
-                Genres = m.MovieGenres?.Select(g => g.Genre.GenreType).ToList() ?? new List<string>()
+                Genres = m.MovieGenres?.Select(g => g.GenreType).ToList() //?? new List<string>()
             }).ToList();
 
             return movieDTOs;
@@ -163,8 +165,6 @@ namespace IMDbLib.Services
         }
 
 
-
-
         public async Task UpdateMovie(MovieBaseDTO movieDTO)
         {
             // Find the existing movie
@@ -185,7 +185,6 @@ namespace IMDbLib.Services
             movie.EndYear = movieDTO.EndYear;
             movie.RuntimeMins = movieDTO.RuntimeMins;
 
-            // Update the genres
             movie.MovieGenres.Clear();
             foreach (var genre in movieDTO.Genres)
             {
@@ -193,25 +192,19 @@ namespace IMDbLib.Services
                 movie.MovieGenres.Add(new MovieGenre { MovieBase = movie, Genre = movieGenre });
             }
 
-            // Save changes to the database
             await _context.SaveChangesAsync();
         }
 
         public async Task DeleteMovie(string tconst)
         {
-            // Find the movie by ID
             var movie = await _context.MovieBases.FindAsync(tconst);
 
-            // If the movie doesn't exist, throw an exception or return an error
             if (movie == null)
             {
                 throw new Exception($"Movie with ID {tconst} not found");
             }
 
-            // Remove the movie from the context
             _context.MovieBases.Remove(movie);
-
-            // Save changes to the database
             await _context.SaveChangesAsync();
         }
 

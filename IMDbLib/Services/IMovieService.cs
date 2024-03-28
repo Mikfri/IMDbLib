@@ -10,6 +10,10 @@ namespace IMDbLib.Services
 {
     public interface IMovieService
     {
-
+        Task AddMovie(MovieBaseDTO movieDTO);
+        Task<List<MovieBaseDTO>> GetMovieListByTitle(string searchString);
+        Task<AllMovieInfoDTO> GetAllMovieInfoByTconst(string tconst);
+        Task UpdateMovie(MovieBaseDTO movieDTO);
+        Task DeleteMovie(string tconst);
     }
 }

@@ -5,21 +5,22 @@
 Relational:MaxIdentifierLength: 128
 RelationshipDiscoveryConvention:InverseNavigationCandidates: System.Collections.Generic.Dictionary`2[System.Type,System.Collections.Generic.SortedSet`1[System.Type]]
 SqlServer:ValueGenerationStrategy: IdentityColumn" Category="Model" Group="Expanded" />
-<Node Id = "BlockBuster" Label="BlockBuster" Name="BlockBuster" BaseClass="" IsAbstract="False" ChangeTrackingStrategy="ChangeTrackingStrategy.Snapshot"  Annotations="Relational:TableName: PersonalBlockbusters
-RelationshipDiscoveryConvention:NavigationCandidates: System.Collections.Immutable.ImmutableSortedDictionary`2[System.Reflection.PropertyInfo,System.ValueTuple`2[System.Type,System.Nullable`1[System.Boolean]]]" Category="EntityType" Group="Expanded" />
 <Node Id = "Genre" Label="Genre" Name="Genre" BaseClass="" IsAbstract="False" ChangeTrackingStrategy="ChangeTrackingStrategy.Snapshot"  Annotations="Relational:TableName: Genres
 RelationshipDiscoveryConvention:NavigationCandidates: System.Collections.Immutable.ImmutableSortedDictionary`2[System.Reflection.PropertyInfo,System.ValueTuple`2[System.Type,System.Nullable`1[System.Boolean]]]" Category="EntityType" Group="Expanded" />
-<Node Id = "BlockBuster.Nconst" Label="Nconst (string)" Name="Nconst" Category="Property Primary" Type="string" MaxLength="None" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="" IsPrimaryKey="True" IsForeignKey="True" IsRequired="True" IsIndexed="False" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="True" ValueGenerated="None" />
-<Node Id = "BlockBuster.MovieBase" Label="MovieBase (1)" Name="MovieBase" Category="Navigation Property" Type="MovieBase"  Field="" Dependent="" Principal="MovieBase" Inverse="" PropertyAccessMode="PropertyAccessMode.Default" />
-<Node Id = "BlockBuster.Person" Label="Person (1)" Name="Person" Category="Navigation Property" Type="Person"  Field="" Dependent="" Principal="Person" Inverse="BlockBusters" PropertyAccessMode="PropertyAccessMode.Default" />
-<Node Id = "BlockBuster.Tconst" Label="Tconst (string)" Name="Tconst" Category="Property Primary" Type="string" MaxLength="None" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="" IsPrimaryKey="True" IsForeignKey="True" IsRequired="True" IsIndexed="True" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="True" ValueGenerated="None" />
-<Node Id = "MovieBase" Label="MovieBase" Name="MovieBase" BaseClass="" IsAbstract="False" ChangeTrackingStrategy="ChangeTrackingStrategy.Snapshot"  Annotations="Relational:TableName: MovieBases
+<Node Id = "KnownForTitle" Label="KnownForTitle" Name="KnownForTitle" BaseClass="" IsAbstract="False" ChangeTrackingStrategy="ChangeTrackingStrategy.Snapshot"  Annotations="Relational:TableName: KnownForTitles
 RelationshipDiscoveryConvention:NavigationCandidates: System.Collections.Immutable.ImmutableSortedDictionary`2[System.Reflection.PropertyInfo,System.ValueTuple`2[System.Type,System.Nullable`1[System.Boolean]]]" Category="EntityType" Group="Expanded" />
 <Node Id = "Genre.GenreType" Label="GenreType (string)" Name="GenreType" Category="Property Primary" Type="string" MaxLength="None" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="" IsPrimaryKey="True" IsForeignKey="False" IsRequired="True" IsIndexed="False" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="True" ValueGenerated="None" />
+<Node Id = "MovieBase" Label="MovieBase" Name="MovieBase" BaseClass="" IsAbstract="False" ChangeTrackingStrategy="ChangeTrackingStrategy.Snapshot"  Annotations="Relational:TableName: MovieBases
+RelationshipDiscoveryConvention:NavigationCandidates: System.Collections.Immutable.ImmutableSortedDictionary`2[System.Reflection.PropertyInfo,System.ValueTuple`2[System.Type,System.Nullable`1[System.Boolean]]]" Category="EntityType" Group="Expanded" />
+<Node Id = "KnownForTitle.Nconst" Label="Nconst (string)" Name="Nconst" Category="Property Primary" Type="string" MaxLength="None" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="" IsPrimaryKey="True" IsForeignKey="True" IsRequired="True" IsIndexed="False" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="True" ValueGenerated="None" />
+<Node Id = "KnownForTitle.MovieBase" Label="MovieBase (1)" Name="MovieBase" Category="Navigation Property" Type="MovieBase"  Field="" Dependent="" Principal="MovieBase" Inverse="KnownForTitles" PropertyAccessMode="PropertyAccessMode.Default" />
+<Node Id = "KnownForTitle.Person" Label="Person (1)" Name="Person" Category="Navigation Property" Type="Person"  Field="" Dependent="" Principal="Person" Inverse="KnownForTitles" PropertyAccessMode="PropertyAccessMode.Default" />
+<Node Id = "KnownForTitle.Tconst" Label="Tconst (string)" Name="Tconst" Category="Property Primary" Type="string" MaxLength="None" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="" IsPrimaryKey="True" IsForeignKey="True" IsRequired="True" IsIndexed="True" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="True" ValueGenerated="None" />
 <Node Id = "MovieDirector" Label="MovieDirector" Name="MovieDirector" BaseClass="" IsAbstract="False" ChangeTrackingStrategy="ChangeTrackingStrategy.Snapshot"  Annotations="Relational:TableName: Directors
 RelationshipDiscoveryConvention:NavigationCandidates: System.Collections.Immutable.ImmutableSortedDictionary`2[System.Reflection.PropertyInfo,System.ValueTuple`2[System.Type,System.Nullable`1[System.Boolean]]]" Category="EntityType" Group="Expanded" />
 <Node Id = "MovieBase.Tconst" Label="Tconst (string)" Name="Tconst" Category="Property Primary" Type="string" MaxLength="None" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="" IsPrimaryKey="True" IsForeignKey="False" IsRequired="True" IsIndexed="False" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="True" ValueGenerated="None" />
 <Node Id = "MovieBase.Directors" Label="Directors (*)" Name="Directors" Category="Navigation Collection" Type="ICollection&lt;MovieDirector&gt;"  Field="" Dependent="MovieDirector" Principal="" Inverse="MovieBase" PropertyAccessMode="PropertyAccessMode.Default" />
+<Node Id = "MovieBase.KnownForTitles" Label="KnownForTitles (*)" Name="KnownForTitles" Category="Navigation Collection" Type="ICollection&lt;KnownForTitle&gt;"  Field="" Dependent="KnownForTitle" Principal="" Inverse="MovieBase" PropertyAccessMode="PropertyAccessMode.Default" />
 <Node Id = "MovieBase.MovieGenres" Label="MovieGenres (*)" Name="MovieGenres" Category="Navigation Collection" Type="ICollection&lt;MovieGenre&gt;"  Field="" Dependent="MovieGenre" Principal="" Inverse="MovieBase" PropertyAccessMode="PropertyAccessMode.Default" />
 <Node Id = "MovieBase.TitleType" Label="TitleType (1)" Name="TitleType" Category="Navigation Property" Type="TitleType"  Field="" Dependent="" Principal="TitleType" Inverse="" PropertyAccessMode="PropertyAccessMode.Default" />
 <Node Id = "MovieBase.Writers" Label="Writers (*)" Name="Writers" Category="Navigation Collection" Type="ICollection&lt;MovieWriter&gt;"  Field="" Dependent="MovieWriter" Principal="" Inverse="MovieBase" PropertyAccessMode="PropertyAccessMode.Default" />
@@ -51,8 +52,8 @@ RelationshipDiscoveryConvention:NavigationCandidates: System.Collections.Immutab
 <Node Id = "PersonalCareer" Label="PersonalCareer" Name="PersonalCareer" BaseClass="" IsAbstract="False" ChangeTrackingStrategy="ChangeTrackingStrategy.Snapshot"  Annotations="Relational:TableName: PersonalCareers
 RelationshipDiscoveryConvention:NavigationCandidates: System.Collections.Immutable.ImmutableSortedDictionary`2[System.Reflection.PropertyInfo,System.ValueTuple`2[System.Type,System.Nullable`1[System.Boolean]]]" Category="EntityType" Group="Expanded" />
 <Node Id = "Person.Nconst" Label="Nconst (string)" Name="Nconst" Category="Property Primary" Type="string" MaxLength="None" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="" IsPrimaryKey="True" IsForeignKey="False" IsRequired="True" IsIndexed="False" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="True" ValueGenerated="None" />
-<Node Id = "Person.BlockBusters" Label="BlockBusters (*)" Name="BlockBusters" Category="Navigation Collection" Type="ICollection&lt;BlockBuster&gt;"  Field="" Dependent="BlockBuster" Principal="" Inverse="Person" PropertyAccessMode="PropertyAccessMode.Default" />
 <Node Id = "Person.Directors" Label="Directors (*)" Name="Directors" Category="Navigation Collection" Type="ICollection&lt;MovieDirector&gt;"  Field="" Dependent="MovieDirector" Principal="" Inverse="Person" PropertyAccessMode="PropertyAccessMode.Default" />
+<Node Id = "Person.KnownForTitles" Label="KnownForTitles (*)" Name="KnownForTitles" Category="Navigation Collection" Type="ICollection&lt;KnownForTitle&gt;"  Field="" Dependent="KnownForTitle" Principal="" Inverse="Person" PropertyAccessMode="PropertyAccessMode.Default" />
 <Node Id = "Person.PersonalCareers" Label="PersonalCareers (*)" Name="PersonalCareers" Category="Navigation Collection" Type="ICollection&lt;PersonalCareer&gt;"  Field="" Dependent="PersonalCareer" Principal="" Inverse="Person" PropertyAccessMode="PropertyAccessMode.Default" />
 <Node Id = "Person.Writers" Label="Writers (*)" Name="Writers" Category="Navigation Collection" Type="ICollection&lt;MovieWriter&gt;"  Field="" Dependent="MovieWriter" Principal="" Inverse="Person" PropertyAccessMode="PropertyAccessMode.Default" />
 <Node Id = "Person.BirthYear" Label="BirthYear (DateOnly?)" Name="BirthYear" Category="Property Optional" Type="DateOnly?" MaxLength="None" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="" IsPrimaryKey="False" IsForeignKey="False" IsRequired="False" IsIndexed="False" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="True" ValueGenerated="None" />
@@ -71,18 +72,19 @@ RelationshipDiscoveryConvention:NavigationCandidates: System.Collections.Immutab
 <Node Id = "TitleType.Type" Label="Type (string)" Name="Type" Category="Property Primary" Type="string" MaxLength="None" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="" IsPrimaryKey="True" IsForeignKey="False" IsRequired="True" IsIndexed="False" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="True" ValueGenerated="None" />
   </Nodes>
   <Links>
-<Link Source = "IModel" Target="BlockBuster" Category="Contains" />
 <Link Source = "IModel" Target="Genre" Category="Contains" />
-<Link Source = "BlockBuster" Target="BlockBuster.MovieBase" Category="Contains" />
-<Link Source = "BlockBuster" Target="BlockBuster.Person" Category="Contains" />
-<Link Source = "BlockBuster" Target="BlockBuster.Nconst" Category="Contains" />
-<Link Source="BlockBuster" Target="Person" From="BlockBuster.Nconst" To="Person.Nconst" Name="BlockBuster -> Person" Annotations="" IsUnique="False" Label="1:*" Category="Foreign Key" />
-<Link Source="BlockBuster" Target="MovieBase" From="BlockBuster.Tconst" To="MovieBase.Tconst" Name="BlockBuster -> MovieBase" Annotations="" IsUnique="False" Label="1:*" Category="Foreign Key" />
-<Link Source = "BlockBuster" Target="BlockBuster.Tconst" Category="Contains" />
-<Link Source = "IModel" Target="MovieBase" Category="Contains" />
+<Link Source = "IModel" Target="KnownForTitle" Category="Contains" />
 <Link Source = "Genre" Target="Genre.GenreType" Category="Contains" />
+<Link Source = "IModel" Target="MovieBase" Category="Contains" />
+<Link Source = "KnownForTitle" Target="KnownForTitle.MovieBase" Category="Contains" />
+<Link Source = "KnownForTitle" Target="KnownForTitle.Person" Category="Contains" />
+<Link Source = "KnownForTitle" Target="KnownForTitle.Nconst" Category="Contains" />
+<Link Source="KnownForTitle" Target="Person" From="KnownForTitle.Nconst" To="Person.Nconst" Name="KnownForTitle -> Person" Annotations="" IsUnique="False" Label="1:*" Category="Foreign Key" />
+<Link Source="KnownForTitle" Target="MovieBase" From="KnownForTitle.Tconst" To="MovieBase.Tconst" Name="KnownForTitle -> MovieBase" Annotations="" IsUnique="False" Label="1:*" Category="Foreign Key" />
+<Link Source = "KnownForTitle" Target="KnownForTitle.Tconst" Category="Contains" />
 <Link Source = "IModel" Target="MovieDirector" Category="Contains" />
 <Link Source = "MovieBase" Target="MovieBase.Directors" Category="Contains" />
+<Link Source = "MovieBase" Target="MovieBase.KnownForTitles" Category="Contains" />
 <Link Source = "MovieBase" Target="MovieBase.MovieGenres" Category="Contains" />
 <Link Source = "MovieBase" Target="MovieBase.TitleType" Category="Contains" />
 <Link Source = "MovieBase" Target="MovieBase.Writers" Category="Contains" />
@@ -117,8 +119,8 @@ RelationshipDiscoveryConvention:NavigationCandidates: System.Collections.Immutab
 <Link Source="MovieWriter" Target="MovieBase" From="MovieWriter.Tconst" To="MovieBase.Tconst" Name="MovieWriter -> MovieBase" Annotations="" IsUnique="False" Label="1:*" Category="Foreign Key" />
 <Link Source = "MovieWriter" Target="MovieWriter.Nconst" Category="Contains" />
 <Link Source = "IModel" Target="PersonalCareer" Category="Contains" />
-<Link Source = "Person" Target="Person.BlockBusters" Category="Contains" />
 <Link Source = "Person" Target="Person.Directors" Category="Contains" />
+<Link Source = "Person" Target="Person.KnownForTitles" Category="Contains" />
 <Link Source = "Person" Target="Person.PersonalCareers" Category="Contains" />
 <Link Source = "Person" Target="Person.Writers" Category="Contains" />
 <Link Source = "Person" Target="Person.Nconst" Category="Contains" />

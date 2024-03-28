@@ -9,9 +9,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace IMDbLib.Models
 {
-    [Keyless]
     public class PersonalCareer
     {
+        [Key]
         [ForeignKey("Person")]
         public string Nconst { get; set; }
         public Person Person { get; set; }
