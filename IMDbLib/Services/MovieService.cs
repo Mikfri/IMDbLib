@@ -83,17 +83,28 @@ namespace IMDbLib.Services
 
         public async Task<List<MovieBaseDTO>> SearchMovies(string searchString)
         {
-            // Execute the stored procedure
+            //------------ STORED PROCEDURE: Søgning ------------
             var movies = await _context.MovieBases
                 .FromSqlInterpolated($"EXECUTE dbo.SearchMovies {searchString}")
                 .ToListAsync();
 
-            // Load the related entities for each movie
+            //--- + EF Core: Eager loading: TitleType og Genre ---
             foreach (var movie in movies)
             {
                 _context.Entry(movie).Reference(m => m.TitleType).Load();
                 _context.Entry(movie).Collection(m => m.MovieGenres).Query().Include(mg => mg.Genre).Load();
             }
+
+            //------------ EF Core: Søgning med TitleType og Genre ------------
+            //string searchPattern = $"%{searchString}%";
+
+            //var movies = await _context.MovieBases
+            //    .Where(m => EF.Functions.Like(m.PrimaryTitle, searchPattern))
+            //    .Include(m => m.TitleType)
+            //    .Include(m => m.MovieGenres)
+            //        .ThenInclude(mg => mg.Genre)
+            //    .OrderBy(m => m.PrimaryTitle)
+            //    .ToListAsync();
 
             // Convert the MovieBase objects to MovieBaseDTOs
             var movieDTOs = movies.Select(m => new MovieBaseDTO
@@ -111,6 +122,7 @@ namespace IMDbLib.Services
 
             return movieDTOs;
         }
+
 
         public async Task UpdateMovie(MovieBaseDTO movieDTO)
         {
@@ -160,8 +172,8 @@ namespace IMDbLib.Services
 
             // Save changes to the database
             await _context.SaveChangesAsync();
-        }        
+        }
 
-        
+
     }
 }

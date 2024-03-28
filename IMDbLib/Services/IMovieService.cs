@@ -9,7 +9,7 @@ namespace IMDbLib.Services
 {
     public interface IMovieService
     {
-        IEnumerable<MovieBase> SearchMovies(string title);
+        IEnumerable<MovieBase> SearchMoviesEF(string title);
         void AddMovie(MovieBase movie);
         MovieBase GetMovieDetails(string tconst);
         MovieBase UpdateMovie(MovieBase movie);
