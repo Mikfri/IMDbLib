@@ -69,5 +69,39 @@ namespace IMDbLib.Services
             _context.MovieBases.Add(movie);
             await _context.SaveChangesAsync();
         }
+
+        public async Task<List<MovieBaseDTO>> SearchMovies(string searchString)
+        {
+            //------------ STORED PROCEDURE ------------
+            var movies = await _context.MovieBases
+                .FromSqlInterpolated($"EXECUTE dbo.SearchMovies {searchString}")
+                .ToListAsync();
+
+            //------------ EF.Functions.Like ------------
+            //// Add wildcard characters to the search string
+            //string searchPattern = $"%{searchString}%";
+
+            //// Query the database
+            //var movies = await _context.MovieBases
+            //    .Where(m => EF.Functions.Like(m.PrimaryTitle, searchPattern))
+            //    .OrderBy(m => m.PrimaryTitle)
+            //    .ToListAsync();
+
+            // Convert the MovieBase objects to MovieBaseDTOs
+            var movieDTOs = movies.Select(m => new MovieBaseDTO
+            {
+                Tconst = m.Tconst,
+                TitleType = m.TitleType.Type,
+                PrimaryTitle = m.PrimaryTitle,
+                OriginalTitle = m.OriginalTitle,
+                IsAdult = m.IsAdult,
+                StartYear = m.StartYear,
+                EndYear = m.EndYear,
+                RuntimeMins = m.RuntimeMins,
+                Genres = m.MovieGenres.Select(g => g.Genre.GenreType).ToList()
+            }).ToList();
+
+            return movieDTOs;
+        }
     }
 }
