@@ -86,6 +86,40 @@ namespace IMDbLib.Services
             return personDTOs;
         }
 
+        public async Task<AllPersonInfoDTO> GetAllPersonInfoByNconst(string nconst)
+        {
+            var person = await _context.Persons
+                .Include(p => p.PersonalCareers)
+                    .ThenInclude(pc => pc.Profession)
+                .Include(p => p.Directors)
+                    .ThenInclude(d => d.MovieBase)
+                .Include(p => p.Writers)
+                    .ThenInclude(w => w.MovieBase)
+                .Include(p => p.KnownForTitles)
+                    .ThenInclude(k => k.MovieBase)
+                .FirstOrDefaultAsync(p => p.Nconst == nconst);
+
+            if (person == null)
+            {
+                throw new Exception($"Person with ID {nconst} not found");
+            }
+
+            var personDTO = new AllPersonInfoDTO
+            {
+                Nconst = person.Nconst,
+                PrimaryName = person.PrimaryName,
+                BirthYear = person.BirthYear,
+                DeathYear = person.DeathYear,
+                PrimaryProfessions = person.PersonalCareers?.Select(pc => pc.Profession.PrimaryProfession).ToList() ?? new List<string>(),
+                MovieDirectors = person.Directors?.Select(d => d.MovieBase.PrimaryTitle).ToList() ?? new List<string>(),
+                MovieWriters = person.Writers?.Select(w => w.MovieBase.PrimaryTitle).ToList() ?? new List<string>(),
+                KnownForTitles = person.KnownForTitles?.Select(k => k.MovieBase.PrimaryTitle).ToList() ?? new List<string>()
+            };
+
+            return personDTO;
+        }
+
+
         /// <summary>
         /// Sletter en person fra databasen, via en STORED PROCEDURE.
         /// Alle Person relaterede conjuctions slettes også grundet CASCADE DELETE.

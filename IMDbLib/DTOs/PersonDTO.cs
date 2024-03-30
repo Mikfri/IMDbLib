@@ -12,6 +12,6 @@ namespace IMDbLib.DTOs
         public string PrimaryName { get; init; }
         public DateOnly? BirthYear { get; init; }
         public DateOnly? DeathYear { get; init; }
-        public List<string> PrimaryProfessions { get; init; } = new List<string>();
+        public List<string> PrimaryProfessions { get; init; } = new List<string>();        
     }
 }
