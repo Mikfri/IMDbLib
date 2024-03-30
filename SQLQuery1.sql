@@ -1,9 +1,7 @@
-﻿ALTER PROCEDURE dbo.SearchPersons
-@searchString NVARCHAR(400)
+﻿CREATE PROCEDURE DeleteMovie
+    @Tconst nvarchar(50)
 AS
 BEGIN
-    -- Søgning med wildcard og sortering i alfabetisk rækkefølge
-    SELECT * FROM Persons
-    WHERE PrimaryName LIKE '%' + @searchString + '%'
-    ORDER BY PrimaryName ASC;
-END;
+    -- Delete the movie
+    DELETE FROM MovieBases WHERE Tconst = @Tconst;
+END
