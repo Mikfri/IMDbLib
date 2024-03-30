@@ -197,6 +197,11 @@ namespace IMDbLib.Services
 
         public async Task DeleteMovie(string tconst)
         {
+            await _context.Database.ExecuteSqlInterpolatedAsync($"EXECUTE dbo.DeleteMovie {tconst}");
+        }
+
+        public async Task DeleteMovieEF(string tconst)
+        {
             var movie = await _context.MovieBases.FindAsync(tconst);
 
             if (movie == null)

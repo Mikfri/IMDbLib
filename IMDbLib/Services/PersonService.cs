@@ -43,12 +43,16 @@ namespace IMDbLib.Services
             };
 
             // Check if the Professions exist, if not create them and add them to the Person
-            foreach (var profession in personDTO.PrimaryProfessions)
+            foreach (var dbProfession in personDTO.PrimaryProfessions)
             {
-                var personalCareer = await _context.PersonalCareers.FindAsync(profession) ?? new PersonalCareer { PrimProf = profession };
-                //var personalCareer = await _context.PersonalCareers.FirstOrDefaultAsync(pc => pc.PrimProf == profession) ?? new PersonalCareer { PrimProf = profession };
+                var professionEntity = await _context.Professions.FindAsync(dbProfession) ?? new Profession { PrimaryProfession = dbProfession };
+                person.PersonalCareers.Add(new PersonalCareer { Person = person, Profession = professionEntity });
 
-                person.PersonalCareers.Add(personalCareer);
+                // ELLER
+
+                //var professionEntity = await _context.Professions.FindAsync(dbProfession) ?? new Profession { PrimaryProfession = dbProfession };
+                //var personalCareer = new PersonalCareer { Person = person, Profession = professionEntity };
+                //_context.PersonalCareers.Add(personalCareer);
             }
 
             _context.Persons.Add(person);
@@ -80,6 +84,32 @@ namespace IMDbLib.Services
             }).ToList();
 
             return personDTOs;
+        }
+
+        /// <summary>
+        /// Sletter en person fra databasen, via en STORED PROCEDURE.
+        /// Alle Person relaterede conjuctions slettes også grundet CASCADE DELETE.
+        /// </summary>
+        /// <param name="nconst"></param>
+        /// <returns></returns>
+        public async Task DeletePerson(string nconst)
+        {
+            await _context.Database.ExecuteSqlInterpolatedAsync($"EXECUTE dbo.DeletePerson {nconst}");
+        }
+
+        public async Task DeletePersonEF(string nconst)
+        {
+            // Find the person with the given nconst
+            var person = await _context.Persons.FindAsync(nconst);
+
+            if (person != null)
+            {
+                // Remove the person from the DbContext
+                _context.Persons.Remove(person);
+
+                // Save the changes to the database
+                await _context.SaveChangesAsync();
+            }
         }
     }
 }
