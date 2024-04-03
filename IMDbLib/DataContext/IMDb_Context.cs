@@ -34,14 +34,14 @@ namespace IMDbLib.DataContext
                 .HasKey(bb => new { bb.Nconst, bb.Tconst });
 
             modelBuilder.Entity<KnownForTitle>()
-                .HasOne(bb => bb.Person)            // en BlockBuster har en Person
+                .HasOne(bb => bb.Person)            // en KnownForTitles har en Person
                 .WithMany(p => p.KnownForTitles)    // en Person har mange KnownForTitles
-                .HasForeignKey(bb => bb.Nconst);    // en BlockBuster har en fremmednøgle Nconst
+                .HasForeignKey(bb => bb.Nconst);    // en KnownForTitles har en fremmednøgle Nconst
 
             modelBuilder.Entity<KnownForTitle>()
-                .HasOne(bb => bb.MovieBase)         // en BlockBuster har en MovieBase
+                .HasOne(bb => bb.MovieBase)         // en KnownForTitles har en MovieBase
                 .WithMany(mb => mb.KnownForTitles)  // en MovieBase har mange KnownForTitles
-                .HasForeignKey(bb => bb.Tconst);    // en BlockBuster har en fremmednøgle Tconst
+                .HasForeignKey(bb => bb.Tconst);    // en KnownForTitles har en fremmednøgle Tconst
 
             //-------------------Konfiguration for forholdet mellem Person og Profession-------------------
             modelBuilder.Entity<PersonalCareer>()
