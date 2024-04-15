@@ -31,17 +31,17 @@ namespace IMDbLib.DataContext
 
             //--------------------Konfiguration for forholdet mellem Person og MovieBase--------------------
             modelBuilder.Entity<KnownForTitle>()
-                .HasKey(bb => new { bb.Nconst, bb.Tconst });
+                .HasKey(kft => new { kft.Nconst, kft.Tconst });
 
             modelBuilder.Entity<KnownForTitle>()
-                .HasOne(bb => bb.Person)            // en KnownForTitles har en Person
-                .WithMany(p => p.KnownForTitles)    // en Person har mange KnownForTitles
-                .HasForeignKey(bb => bb.Nconst);    // en KnownForTitles har en fremmednøgle Nconst
+                .HasOne(kft => kft.Person)            // en KnownForTitles har en Person
+                .WithMany(p => p.KnownForTitles)      // en Person har mange KnownForTitles
+                .HasForeignKey(kft => kft.Nconst);    // en KnownForTitles har en fremmednøgle Nconst
 
             modelBuilder.Entity<KnownForTitle>()
-                .HasOne(bb => bb.MovieBase)         // en KnownForTitles har en MovieBase
-                .WithMany(mb => mb.KnownForTitles)  // en MovieBase har mange KnownForTitles
-                .HasForeignKey(bb => bb.Tconst);    // en KnownForTitles har en fremmednøgle Tconst
+                .HasOne(kft => kft.MovieBase)         // en KnownForTitles har en MovieBase
+                .WithMany(mb => mb.KnownForTitles)    // en MovieBase har mange KnownForTitles
+                .HasForeignKey(kft => kft.Tconst);    // en KnownForTitles har en fremmednøgle Tconst
 
             //-------------------Konfiguration for forholdet mellem Person og Profession-------------------
             modelBuilder.Entity<PersonalCareer>()
@@ -54,7 +54,7 @@ namespace IMDbLib.DataContext
 
             modelBuilder.Entity<PersonalCareer>()
                 .HasOne(pc => pc.Profession)        // en PersonalCareer har en Profession
-                .WithMany()
+                .WithMany(/*pr => pr.PersonalCareers*/) // en Profession har mange PersonalCareers
                 .HasForeignKey(pc => pc.PrimProf);  // en PersonalCareer har en fremmednøgle PrimProf
 
             //-------------------Konfiguration for forholdet mellem MovieBase og Genre-------------------

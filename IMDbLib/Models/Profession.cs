@@ -13,7 +13,8 @@ namespace IMDbLib.Models
         [Key]
         [Name("primaryProfession")]
         public string? PrimaryProfession { get; set; }
-        
+
+        //public ICollection<PersonalCareer> PersonalCareers { get; set; } = new List<PersonalCareer>();
         public Profession() { }
 
         public override string ToString()
